@@ -4,7 +4,7 @@ require "json"
 require "net/http"
 
 PREFIX = "xkcd"
-bot = Bot.new("xkcdbot", ENV["BOT_TOKEN"])
+BOT = Bot.new("xkcdbot", ENV["BOT_TOKEN"])
 
 def xkcd_get(query)
   uri = URI(query != "" ? "https://xkcd.com/#{query}/info.0.json" : "https://xkcd.com/info.0.json")
@@ -33,8 +33,11 @@ def reply(message, group_id)
   else
     uri = URI("https://api.groupme.com/v3/bots/post")
     req = Net::HTTP::Post.new(uri, "Content-Type" => "application/json")
+    puts group_id
+    BOT.instance(group_id)
+    puts BOT.instance(group_id).id
     req.body = {
-        bot_id: bot.instance(group_id).id,
+        bot_id: BOT.instance(group_id).id,
         text: message,
     }.to_json
     res = Net::HTTP.start(uri.hostname, uri.port) do |http|
