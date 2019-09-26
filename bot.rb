@@ -25,10 +25,10 @@ def process(message)
   return responses
 end
 
-def send(message, group_id)
+def reply(message, group_id)
   if message.kind_of?(Array)
     message.each { |item|
-      send(item, group_id)
+      reply(item, group_id)
     }
   else
     uri = URI("https://api.groupme.com/v3/bots/post")
@@ -51,6 +51,6 @@ post "/" do
   message = JSON.parse(request.body.read)
   responses = process(message)
   if responses
-    send(responses, message["group_id"])
+    reply(responses, message["group_id"])
   end
 end
