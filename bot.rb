@@ -25,6 +25,24 @@ def process(message)
   return responses
 end
 
+def send(message, group_id)
+  if message.kind_of?(Array)
+    message.each { |item|
+      send(item, group_id)
+    }
+  else
+    uri = URI("https://api.groupme.com/v3/bots/post")
+    req = Net::HTTP::Post.new(uri, "Content-Type" => "application/json")
+    req.body = {
+        bot_id: bot.instance(group_id).id,
+        text: message,
+    }.to_json
+    res = Net::HTTP.start(uri.hostname, uri.port) do |http|
+      http.request(req)
+    end
+  end
+end
+
 get "/" do
   "I'm XKCDBot!"
 end
@@ -32,5 +50,7 @@ end
 post "/" do
   message = JSON.parse(request.body.read)
   responses = process(message)
-  puts responses
+  if responses
+    send(responses, message["group_id"])
+  end
 end
