@@ -34,8 +34,8 @@ def reply(message, group_id)
     uri = URI("https://api.groupme.com/v3/bots/post")
     req = Net::HTTP::Post.new(uri, "Content-Type" => "application/json")
     req.body = {
-        bot_id: BOT.instance(group_id).id,
-        text: message,
+        "bot_id" => BOT.instance(group_id).id,
+        "text" => message,
     }.to_json
     res = Net::HTTP.start(uri.hostname, uri.port) do |http|
       http.request(req)
