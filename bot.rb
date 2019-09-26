@@ -33,9 +33,6 @@ def reply(message, group_id)
   else
     uri = URI("https://api.groupme.com/v3/bots/post")
     req = Net::HTTP::Post.new(uri, "Content-Type" => "application/json")
-    puts group_id
-    BOT.instance(group_id)
-    puts BOT.instance(group_id).id
     req.body = {
         bot_id: BOT.instance(group_id).id,
         text: message,
