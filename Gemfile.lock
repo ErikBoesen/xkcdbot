@@ -3,6 +3,9 @@ GEM
   specs:
     mebots (0.1.0)
     mustermann (1.0.3)
+    nio4r (2.5.2)
+    puma (4.2.0)
+      nio4r (~> 2.0)
     rack (2.0.7)
     rack-protection (2.0.7)
       rack
@@ -18,6 +21,7 @@ PLATFORMS
 
 DEPENDENCIES
   mebots
+  puma
   sinatra
 
 BUNDLED WITH
