@@ -45,7 +45,7 @@ def reply(message, group_id)
 end
 
 get "/" do
-  "I'm XKCDBot!"
+  "I'm XKCDBot, a fun bot for GroupMe! View me on MeBots and add me to your chat <a href=\"http://mebots.co/bot/xkcdbot\">here</a>!"
 end
 
 post "/" do
