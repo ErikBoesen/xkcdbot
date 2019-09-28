@@ -5,6 +5,10 @@ require "net/http"
 
 PREFIX = "xkcd"
 BOT = Bot.new("xkcdbot", ENV["BOT_TOKEN"])
+POST_URI = URI("https://api.groupme.com/v3/bots/post")
+POST_HTTP = Net::HTTP.new(POST_URI.host, POST_URI.port)
+POST_HTTP.use_ssl = true
+POST_HTTP.verify_mode = OpenSSL::SSL::VERIFY_PEER
 
 def xkcd_get(query)
   uri = URI(query != "" ? "https://xkcd.com/#{query}/info.0.json" : "https://xkcd.com/info.0.json")
@@ -31,15 +35,12 @@ def reply(message, group_id)
       reply(item, group_id)
     }
   else
-    uri = URI("https://api.groupme.com/v3/bots/post")
-    req = Net::HTTP::Post.new(uri, "Content-Type" => "application/json")
+    req = Net::HTTP::Post.new(POST_URI, "Content-Type" => "application/json")
     req.body = {
-        "bot_id" => BOT.instance(group_id).id,
-        "text" => message,
+        bot_id: BOT.instance(group_id).id,
+        text: message,
     }.to_json
-    res = Net::HTTP.start(uri.hostname, uri.port) do |http|
-      http.request(req)
-    end
+    POST_HTTP.request(req)
   end
 end
 
