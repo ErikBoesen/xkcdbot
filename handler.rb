@@ -1,8 +1,16 @@
+load 'vendor/bundle/bundler/setup.rb'
 require 'mebots'
 require 'json'
 require 'net/http'
 
-def hello(event:, context:)
+PREFIX = 'xkcd'
+BOT = Bot.new('xkcdbot', ENV['BOT_TOKEN'])
+POST_URI = URI('https://api.groupme.com/v3/bots/post')
+POST_HTTP = Net::HTTP.new(POST_URI.host, POST_URI.port)
+POST_HTTP.use_ssl = true
+POST_HTTP.verify_mode = OpenSSL::SSL::VERIFY_PEER
+
+def receive(event:, context:)
   message = JSON.parse(event['body'])
   responses = process(message)
   if responses
@@ -15,14 +23,6 @@ def hello(event:, context:)
     }.to_json
   }
 end
-
-
-PREFIX = 'xkcd'
-BOT = Bot.new('xkcdbot', ENV['BOT_TOKEN'])
-POST_URI = URI('https://api.groupme.com/v3/bots/post')
-POST_HTTP = Net::HTTP.new(POST_URI.host, POST_URI.port)
-POST_HTTP.use_ssl = true
-POST_HTTP.verify_mode = OpenSSL::SSL::VERIFY_PEER
 
 def xkcd_get(query)
   uri = URI(query != '' ? "https://xkcd.com/#{query}/info.0.json" : 'https://xkcd.com/info.0.json')
