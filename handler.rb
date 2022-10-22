@@ -16,7 +16,7 @@ def receive(event:, context:)
   if responses
     reply(responses, message['group_id'])
   end
-  {
+  return {
     statusCode: 200,
     body: {
       message: 'Message received'
@@ -56,7 +56,4 @@ def reply(message, group_id)
     }.to_json
     POST_HTTP.request(req)
   end
-end
-
-post '/' do
 end
